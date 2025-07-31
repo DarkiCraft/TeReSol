@@ -102,4 +102,8 @@ def train_and_predict(df: pd.DataFrame) -> dict:
         y_scaled=scaler_y.fit_transform(y.reshape(-1,1)).flatten() 
 
         split = int(0.8*len(x_scaled))
+        X_train = x_scaled[:split]      
+        X_test = x_scaled[split:]       
+        y_train = y_scaled[:split]      
+        y_test = y_scaled[split:] 
     
