@@ -98,7 +98,8 @@ def train_and_predict(df: pd.DataFrame) -> dict:
         scaler_x= MinMaxScaler()
         scaler_y= MinMaxScaler()
 
-        x_scaler=scaler_x.fit_transform(x)
-        y_scaler=scaler_y.fit_transform(y.reshape(-1,1)).flatten() 
+        x_scaled=scaler_x.fit_transform(x)
+        y_scaled=scaler_y.fit_transform(y.reshape(-1,1)).flatten() 
 
+        split = int(0.8*len(x_scaled))
     
