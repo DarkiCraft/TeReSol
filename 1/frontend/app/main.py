@@ -153,7 +153,7 @@ with col2:
     st.markdown("""
     <div class="nav-container">
         <div style="text-align: center;">
-            <h1 style="color: #2c3e50; margin-bottom: 1rem;">📈 NASDAQ Analytics Dashboard</h1>
+            <h1 style="color: #2c3e50; margin-bottom: 1rem;">📈 Stock Exchange Analytics Dashboard</h1>
         </div>
     </div>
     """, unsafe_allow_html=True)
