@@ -96,6 +96,9 @@ def train_and_predict(df: pd.DataFrame) -> dict:
         y=np.array(y)
 
         scaler_x= MinMaxScaler()
+        scaler_y= MinMaxScaler()
 
+        x_scaler=scaler_x.fit_transform(x)
+        y_scaler=scaler_y.fit_transform(y.reshape(-1,1)).flatten() 
 
     
