@@ -5,6 +5,10 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from datetime import timedelta
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow import layers
+from sklearn.preprocessing import MinMaxScaler
 
 df_files_list : Dict[str, pd.DataFrame] = {}
 
@@ -50,6 +54,8 @@ def get_file_data(symbol: str):
     df_files_list[symbol] = df_file_init(df)
     return df_files_list[symbol]
 
+#to calculate daily return
+
 def get_calculation_data(df: pd.DataFrame) -> dict:
     df = df.copy()
     df['Daily return'] = df["Close"].pct_change()
@@ -70,42 +76,26 @@ def get_calculation_data(df: pd.DataFrame) -> dict:
         "Sharpe Ratio": sharpe,
         "Value At Risk 95%": var_95
     }
+# basic future prediction
 
 def train_and_predict(df: pd.DataFrame) -> dict:
-    df = df.copy()
-    df = df[["Date", "Close"]].dropna()
+    # try:
+        prices = df['close'].values
+
+        if len(prices)<100:
+            return{"error":"not enough data"}
+        
+        x=[]
+        y=[]
+        
+        for i in range(5,len(prices)):
+                x.append(prices[i-5:i])
+                y.append(prices[i])
+
+        x=np.array(x)
+        y=np.array(y)
+
+        scaler_x= MinMaxScaler()
+
+
     
-    if "Date" not in df.columns:
-        df = df.reset_index()
-
-    df['Date_Ordinal'] = df['Date'].map(pd.Timestamp.toordinal)
-
-    x = df[['Date_Ordinal']]
-    y = df['Close']
-
-    model = LinearRegression()
-    model.fit(x, y)
-    y_pred = model.predict(x)
-
-    mae = mean_absolute_error(y, y_pred)
-    rmse = np.sqrt(mean_squared_error(y, y_pred))
-    r2 = r2_score(y, y_pred)
-
-    last_date = df['Date'].max()
-    future_dates = [last_date + timedelta(days=i) for i in range(1, 11)]
-    future_date_ordinals = [d.toordinal() for d in future_dates]
-    future_preds = model.predict(np.array(future_date_ordinals).reshape(-1, 1))
-
-    future_df = pd.DataFrame({
-        'Date': future_dates,
-        'Predicted_close': future_preds
-    })
-    return    {
-        "symbol": df.get("Symbol", "Unknown"),
-        "metrics": {
-            "MAE": mae,
-            "RMSE": rmse,
-            "R2": r2
-        },
-        "predictions": future_df.to_dict(orient='records')
-    }
