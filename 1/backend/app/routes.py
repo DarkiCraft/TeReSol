@@ -86,6 +86,8 @@ def get_stocks_symbol_data_date(symbol: str, date: datetime):
     except KeyError:
         return JSONResponse(status_code=404, content={"error": f"Date '{date.date()}' not found for symbol '{symbol}'"})
 
+#volitility shapre ratio
+
 @router.get("/stocks/{symbol}/analytics")
 @safe_symbol_access
 def get_stocks_symbol_analytics(symbol: str):
