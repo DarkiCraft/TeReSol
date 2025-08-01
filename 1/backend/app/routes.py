@@ -99,34 +99,20 @@ def get_stocks_symbol_analytics(symbol: str):
 def get_distribution_etf():
     df = get_meta_info()
     return df["ETF"].value_counts().to_dict()
-
+# market categrories Q N
 @router.get("/distribution/exchanges")
 def get_distribution_exchanges():
     df = get_meta_info()
 
     return df["Listing Exchange"].value_counts().to_dict()
+# missing 
 
 @router.get("/distribution/categories")
 def get_distribution_categories():
     df = get_meta_info()
     return df["Market Category"].value_counts().to_dict()
 
-class StockItem(BaseModel):
-     symbol: str = Field(..., example="MSFT", description="Unique stock ticker symbol (e.g., TSLA, GOOG)")
-     company_name: str = Field(..., example="Microsoft Corp", description="Full name of the company")
-     market_category: Optional[str] = Field(None, example="NMS", description="Market category (e.g., NMS, GBL, OTC)")
-     listing_exchange: Optional[str] = Field(None, example="NASDAQ", description="Exchange where the stock is listed (e.g., NASDAQ, NYSE)")
-     etf: Optional[bool] = Field(False, description="True if the stock is an Exchange Traded Fund (ETF), False otherwise")
-@router.post("/stocks/add")
-async def add_stocks_item(stocks: StockItem):
-    """
-    Receives JSON data to add a new stock item.
-    This endpoint demonstrates how to accept structured JSON input using Pydantic.
-    (Note: This example only echoes the data back; it does not persist it.)
-    """
-    print(f"Received new stock Items :{stocks.dict()}")
-    return {"message":"Stocks items Received successfully","data":stocks.dict()}
-     
+
 
 
 @router.post("/upload")
